@@ -80,9 +80,9 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
         // ***************** Word to the right, nothing to the left *****************
         if(right.pos == 0) {
             // POS is unknown
-            get_pos_list_from_word("sd-card.bin",right.word,taglist);
+            get_pos_list_from_word("data/sd-card.bin",right.word,taglist);
             for (i = 0; i < MAX_TAGS_PER_WORD; i++) {
-                get_all_transitions("sd-card.bin",taglist[i].pos,poslist,'r');
+                get_all_transitions("data/sd-card.bin",taglist[i].pos,poslist,'r');
                 for (j = 0; j < MAX_NUM_TAGS; j++) {
                     prob = poslist[j].val * (taglist[i].val + 1);
                     if (prob > bestsofar) {
@@ -97,24 +97,24 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
 
         } else {
             // POS is known
-            get_all_transitions("sd-card.bin",right.pos,poslist,'r');
+            get_all_transitions("data/sd-card.bin",right.pos,poslist,'r');
             best = random_index_based_on_frequency(poslist,MAX_NUM_TAGS);
         }
 
         if(best == 0) {
-            strcpy(new_word,get_random_word("sd-card.bin"));
+            strcpy(new_word,get_random_word("data/sd-card.bin"));
         } else {
             // choose a random word based on the chosen POS
-            strcpy(new_word,get_random_word_from_pos("sd-card.bin",best,word_index));
+            strcpy(new_word,get_random_word_from_pos("data/sd-card.bin",best,word_index));
         }
 
     } else if (isright == FALSE && isleft == TRUE) {
         // ***************** Word to the left, nothing to the right *****************
         if(left.pos == 0) {
             // POS is unknown
-            get_pos_list_from_word("sd-card.bin",left.word,taglist);
+            get_pos_list_from_word("data/sd-card.bin",left.word,taglist);
             for (i = 0; i < MAX_TAGS_PER_WORD; i++) {
-                get_all_transitions("sd-card.bin",taglist[i].pos,poslist,'l');
+                get_all_transitions("data/sd-card.bin",taglist[i].pos,poslist,'l');
                 for (j = 0; j < MAX_NUM_TAGS; j++) {
                     prob = poslist[j].val * (taglist[i].val + 1);
                     if (prob > bestsofar) {
@@ -129,15 +129,15 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
 
         } else {
             // POS is known
-            get_all_transitions("sd-card.bin",left.pos,poslist,'l');
+            get_all_transitions("data/sd-card.bin",left.pos,poslist,'l');
             best = random_index_based_on_frequency(poslist,MAX_NUM_TAGS);
         }
 
         if(best == 0) {
-            strcpy(new_word,get_random_word("sd-card.bin"));
+            strcpy(new_word,get_random_word("data/sd-card.bin"));
         } else {
             // choose a random word based on the chosen POS
-            strcpy(new_word,get_random_word_from_pos("sd-card.bin",best,word_index));
+            strcpy(new_word,get_random_word_from_pos("data/sd-card.bin",best,word_index));
         }
 
     } else if (isright == TRUE && isleft == TRUE) {
@@ -145,18 +145,18 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
 
         // assigns a POS to neighbours if they don't have one
         if(left.pos == 0) {
-            get_pos_list_from_word("sd-card.bin",left.word,taglist);
+            get_pos_list_from_word("data/sd-card.bin",left.word,taglist);
             index = random_index_based_on_frequency(taglist,MAX_TAGS_PER_WORD);
             left.pos = taglist[index].pos;
         }
         if(right.pos == 0) {
-            get_pos_list_from_word("sd-card.bin",right.word,taglist);
+            get_pos_list_from_word("data/sd-card.bin",right.word,taglist);
             index = random_index_based_on_frequency(taglist,MAX_TAGS_PER_WORD);
             right.pos = taglist[index].pos;
         }
 
-        get_all_transitions("sd-card.bin",left.pos,poslist,'l');
-        get_all_transitions("sd-card.bin",right.pos,poslist2,'r');
+        get_all_transitions("data/sd-card.bin",left.pos,poslist,'l');
+        get_all_transitions("data/sd-card.bin",right.pos,poslist2,'r');
         result = do_intersection(poslist,poslist2,intersect);
 
         if(result > 0) {
@@ -164,9 +164,9 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
             best = intersect[result].pos;
 
             // choose a random word based on the chosen POS
-            strcpy(new_word,get_random_word_from_pos("sd-card.bin",best,word_index));
+            strcpy(new_word,get_random_word_from_pos("data/sd-card.bin",best,word_index));
         } else {
-            strcpy(new_word,get_random_word("sd-card.bin"));
+            strcpy(new_word,get_random_word("data/sd-card.bin"));
             best = 0;
         }
 
@@ -211,7 +211,7 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
         if(strcmp(old_word,new_word) == 0)
             printf("Duplicate word!\n");
         */
-        strcpy(new_word,get_random_word("sd-card.bin"));
+        strcpy(new_word,get_random_word("data/sd-card.bin"));
         best = 0;
     }
 

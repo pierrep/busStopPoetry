@@ -2,15 +2,15 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetLogLevel(OF_LOG_NOTICE);
+   // ofSetLogLevel(OF_LOG_VERBOSE);
 	bSendSerialMessage = false;
 	
 	serial.listDevices();
 	vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
-	int baud = 9600;
-    bUseSerial = serial.setup(0, baud); //open the first device
+    int baud = 115200;
+    //bUseSerial = serial.setup(0, baud); //open the first device
 
-	//serial.setup("/dev/ttyUSB0", baud); //linux example
+    bUseSerial = serial.setup("/dev/ttyACM0", baud); //linux example
     if(bUseSerial) {
         unsigned char buf[10];
         serial.writeBytes(buf,10);
@@ -41,8 +41,7 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::writeWord()
-{
-
+{    
     string str = poetry.getWord(0);
     ofLogNotice() << "Word: " << str;
     if(bUseSerial) {
