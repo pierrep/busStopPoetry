@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "WordPoetry.h"
 
+#define NUM_WORDS 5
+
 class ofApp : public ofBaseApp{
 	
 	public:
@@ -22,14 +24,21 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-        void writeWord();
+		void loadSettings();
+        void writeWord(int index);
 		
 
         WordPoetry  poetry;
 
         ofSerial	serial;
+        ofSerial	serial2;
+        string		serialName[NUM_WORDS];
         bool		bSendSerialMessage;
         bool        bUseSerial;
+        
+        
+		ofXml 		xml;
+        string w[NUM_WORDS];
 
 };
 

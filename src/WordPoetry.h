@@ -5,7 +5,7 @@
 #include "ofMain.h"
 
 #define MAX_NUM_TAGS	32
-#define MAX_WORD_LENGTH 10
+#define MAX_WORD_LENGTH 20
 #define NUM_MAGNETS		5
 
 class WordPoetry

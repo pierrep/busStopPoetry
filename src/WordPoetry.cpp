@@ -78,6 +78,7 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
     if(isright == TRUE && isleft == FALSE)
     {
         // ***************** Word to the right, nothing to the left *****************
+        ofLogNotice() << "Word to the right and to the left";
         if(right.pos == 0) {
             // POS is unknown
             get_pos_list_from_word("data/sd-card.bin",right.word,taglist);
@@ -110,6 +111,7 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
 
     } else if (isright == FALSE && isleft == TRUE) {
         // ***************** Word to the left, nothing to the right *****************
+         ofLogNotice() << "Word to the left, nothing to the right";
         if(left.pos == 0) {
             // POS is unknown
             get_pos_list_from_word("data/sd-card.bin",left.word,taglist);
@@ -142,7 +144,7 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
 
     } else if (isright == TRUE && isleft == TRUE) {
         // ***************** Word to the right and to the left *****************
-
+		ofLogNotice() << "Word to the right and to the left";
         // assigns a POS to neighbours if they don't have one
         if(left.pos == 0) {
             get_pos_list_from_word("data/sd-card.bin",left.word,taglist);
@@ -172,7 +174,7 @@ uint8_t WordPoetry::select_word(uint8_t loc, Magnet magnets[], uint16_t word_ind
 
     } else {
         // ***************** Nothing to the right, nothing to the left *****************
-
+		ofLogNotice() << "Nothing to the right, nothing to the left";
         //assume start of sentence - select a random (appropriate) word
         i = (int) ofRandom(1,10);
         switch(i) {
