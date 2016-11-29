@@ -30,8 +30,8 @@ class ofApp : public ofBaseApp{
 
         WordPoetry  poetry;
 
-        ofSerial	serial;
-        ofSerial	serial2;
+        ofSerial	serial[NUM_WORDS];
+        ofSerial	xbee;
         string		serialName[NUM_WORDS];
         bool		bSendSerialMessage;
         bool        bUseSerial;

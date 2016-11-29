@@ -6,17 +6,26 @@ void ofApp::setup(){
 	bSendSerialMessage = false;
 	
 	loadSettings();
-	serial.listDevices();
-	vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
+	serial[0].listDevices();
+	//vector <ofSerialDeviceInfo> deviceList = serial[0].getDeviceList();
     int baud = 115200;
 
-    bUseSerial = serial.setup(serialName[0], baud); //linux example
+    bUseSerial = serial[0].setup(serialName[0], baud); //linux example
 
     if(bUseSerial) {
-		bUseSerial = serial2.setup(serialName[1], baud); //linux example		
+		bUseSerial = serial[1].setup(serialName[1], baud); //linux example	
+		bUseSerial = serial[2].setup(serialName[2], baud); //linux example			
+		bUseSerial = serial[3].setup(serialName[3], baud); //linux example	
+		bUseSerial = serial[4].setup(serialName[4], baud); //linux example	
+							
         unsigned char buf[10];
-        serial.writeBytes(buf,10);
-        serial2.writeBytes(buf,10);
+        serial[0].writeBytes(buf,10);
+        serial[1].writeBytes(buf,10);
+        serial[2].writeBytes(buf,10);
+        serial[3].writeBytes(buf,10);
+        serial[4].writeBytes(buf,10);  
+        
+        xbee.setup("/dev/ttyUSB0",9600);              
     }
 
     poetry.setup();
@@ -30,10 +39,59 @@ void ofApp::update(){
 		
         writeWord(0);
         writeWord(1);
-		
+        writeWord(2);
+        writeWord(3);
+        writeWord(4);
 		bSendSerialMessage = false;
 
 	}
+	
+	int myByte = 0;
+	myByte = xbee.readByte();
+	if ( myByte == OF_SERIAL_NO_DATA )
+	  //ofLogNotice() << "no data was read";
+	  ;
+	else if ( myByte == OF_SERIAL_ERROR )
+	  ofLogNotice() << "an Xbee serial error occurred";
+	else {
+	  //ofLogNotice() << "byte received is: " << myByte;
+	  if(myByte == 3) {
+		w[0] = poetry.getWord(0);
+		while(w[0].length() > 10) 
+		{
+			w[0] = poetry.getWord(0);
+		}
+		writeWord(0);
+	  } else if (myByte == 2) {
+		w[1] = poetry.getWord(1);
+		while(w[1].length() > 10) 
+		{
+			w[1] = poetry.getWord(1);
+		}		
+		writeWord(1);	  
+	  } else if (myByte == 1) {
+		w[2] = poetry.getWord(2);
+		while(w[2].length() > 10) 
+		{
+			w[2] = poetry.getWord(2);
+		}			
+		writeWord(2);		  
+	  } else if (myByte == 4) {
+		w[3] = poetry.getWord(3);
+		while(w[3].length() > 10) 
+		{
+			w[3] = poetry.getWord(3);
+		}			
+		writeWord(3);		  
+	  }	else if (myByte == 5) {
+		w[4] = poetry.getWord(4);
+		while(w[4].length() > 10) 
+		{
+			w[4] = poetry.getWord(4);
+		}			
+		writeWord(4);		  
+	  }
+    }
 }
 
 //--------------------------------------------------------------
@@ -50,23 +108,29 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::writeWord(int index)
 {    
-    string str = poetry.getWord(index);
-    ofLogNotice() << "Word: " << str;
+    //w[index] = poetry.getWord(index);
+    ofLogNotice() << "Word: " << w[index];
     if(bUseSerial) {
         unsigned char buf[10];
-        for(unsigned int i = 0; i < str.length();i++)
+        for(unsigned int i = 0; i < w[index].length();i++)
         {
-            buf[i] = str.c_str()[i];
+            buf[i] = w[index].c_str()[i];
         }
         if(index == 0)
-			serial.writeBytes(buf,str.length());
-		if(index == 1)
-			serial2.writeBytes(buf,str.length());
+			serial[0].writeBytes(buf,w[index].length());
+		else if(index == 1)
+			serial[1].writeBytes(buf,w[index].length());
+		else if(index == 2)
+			serial[2].writeBytes(buf,w[index].length());
+		else if(index == 3)
+			serial[3].writeBytes(buf,w[index].length());
+		else if(index == 4)
+			serial[4].writeBytes(buf,w[index].length());									
     }
 }
 
 
-//
+//--------------------------------------------------------------
 void ofApp::loadSettings()
 {
 	if(xml.load("settings.xml") ){
@@ -117,6 +181,7 @@ void ofApp::keyPressed  (int key){
 	if(key == '3') w[2] = poetry.getWord(2);
 	if(key == '4') w[3] = poetry.getWord(3);
 	if(key == '5') w[4] = poetry.getWord(4);
+	bSendSerialMessage = true;
 }
 
 //--------------------------------------------------------------
