@@ -56,39 +56,14 @@ void ofApp::update(){
 	else {
 	  //ofLogNotice() << "byte received is: " << myByte;
 	  if(myByte == 3) {
-		w[0] = poetry.getWord(0);
-		while(w[0].length() > 10) 
-		{
-			w[0] = poetry.getWord(0);
-		}
 		writeWord(0);
 	  } else if (myByte == 2) {
-		w[1] = poetry.getWord(1);
-		while(w[1].length() > 10) 
-		{
-			w[1] = poetry.getWord(1);
-		}		
 		writeWord(1);	  
-	  } else if (myByte == 1) {
-		w[2] = poetry.getWord(2);
-		while(w[2].length() > 10) 
-		{
-			w[2] = poetry.getWord(2);
-		}			
+	  } else if (myByte == 1) {	
 		writeWord(2);		  
-	  } else if (myByte == 4) {
-		w[3] = poetry.getWord(3);
-		while(w[3].length() > 10) 
-		{
-			w[3] = poetry.getWord(3);
-		}			
+	  } else if (myByte == 4) {	
 		writeWord(3);		  
-	  }	else if (myByte == 5) {
-		w[4] = poetry.getWord(4);
-		while(w[4].length() > 10) 
-		{
-			w[4] = poetry.getWord(4);
-		}			
+	  }	else if (myByte == 5) {			
 		writeWord(4);		  
 	  }
     }
@@ -108,7 +83,12 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::writeWord(int index)
 {    
-    //w[index] = poetry.getWord(index);
+	w[index] = poetry.getWord(index);
+	while(w[index].length() > 10) 
+	{
+		w[index] = poetry.getWord(index);
+	}
+			
     ofLogNotice() << "Word: " << w[index];
     if(bUseSerial) {
         unsigned char buf[10];
@@ -176,12 +156,12 @@ void ofApp::loadSettings()
 
 //--------------------------------------------------------------
 void ofApp::keyPressed  (int key){ 
-	if(key == '1') w[0] = poetry.getWord(0);
-	if(key == '2') w[1] = poetry.getWord(1);
-	if(key == '3') w[2] = poetry.getWord(2);
-	if(key == '4') w[3] = poetry.getWord(3);
-	if(key == '5') w[4] = poetry.getWord(4);
-	bSendSerialMessage = true;
+	if(key == '1') writeWord(0);
+	if(key == '2') writeWord(1);
+	if(key == '3') writeWord(2);
+	if(key == '4') writeWord(3);
+	if(key == '5') writeWord(4);
+	//bSendSerialMessage = true;
 }
 
 //--------------------------------------------------------------
