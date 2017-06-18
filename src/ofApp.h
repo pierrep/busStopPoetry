@@ -35,6 +35,7 @@ class ofApp : public ofBaseApp{
         string		serialName[NUM_WORDS];
         bool		bSendSerialMessage;
         bool        bUseSerial;
+        bool        bUseXbee;
         
         
 		ofXml 		xml;

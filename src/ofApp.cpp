@@ -10,6 +10,7 @@ void ofApp::setup(){
 	//vector <ofSerialDeviceInfo> deviceList = serial[0].getDeviceList();
     int baud = 115200;
 
+    bUseXbee = false;
     bUseSerial = serial[0].setup(serialName[0], baud); //linux example
 
     if(bUseSerial) {
@@ -23,9 +24,11 @@ void ofApp::setup(){
         serial[1].writeBytes(buf,10);
         serial[2].writeBytes(buf,10);
         serial[3].writeBytes(buf,10);
-        serial[4].writeBytes(buf,10);  
-        
-        xbee.setup("/dev/ttyUSB0",9600);              
+        serial[4].writeBytes(buf,10);              
+    }
+
+    if(bUseXbee) {
+        xbee.setup("/dev/ttyUSB0",9600);
     }
 
     poetry.setup();
@@ -46,26 +49,29 @@ void ofApp::update(){
 
 	}
 	
-	int myByte = 0;
-	myByte = xbee.readByte();
-	if ( myByte == OF_SERIAL_NO_DATA )
-	  //ofLogNotice() << "no data was read";
-	  ;
-	else if ( myByte == OF_SERIAL_ERROR )
-	  ofLogNotice() << "an Xbee serial error occurred";
-	else {
-	  //ofLogNotice() << "byte received is: " << myByte;
-	  if(myByte == 3) {
-		writeWord(0);
-	  } else if (myByte == 2) {
-		writeWord(1);	  
-	  } else if (myByte == 1) {	
-		writeWord(2);		  
-	  } else if (myByte == 4) {	
-		writeWord(3);		  
-	  }	else if (myByte == 5) {			
-		writeWord(4);		  
-	  }
+
+    if(bUseXbee) {
+        int myByte = 0;
+        myByte = xbee.readByte();
+        if ( myByte == OF_SERIAL_NO_DATA )
+          //ofLogNotice() << "no data was read";
+          ;
+        else if ( myByte == OF_SERIAL_ERROR )
+          ofLogNotice() << "an Xbee serial error occurred";
+        else {
+          //ofLogNotice() << "byte received is: " << myByte;
+          if(myByte == 3) {
+            writeWord(0);
+          } else if (myByte == 2) {
+            writeWord(1);
+          } else if (myByte == 1) {
+            writeWord(2);
+          } else if (myByte == 4) {
+            writeWord(3);
+          }	else if (myByte == 5) {
+            writeWord(4);
+          }
+        }
     }
 }
 
